@@ -13,18 +13,22 @@
 #
 # For more information, see: https://docs.gitlab.com/ee/ci/yaml/index.html#stages
 
-minify-js:
+stages:          # List of stages for jobs, and their order of execution
+  - build
+  - deploy
+
+build-job:       # This job runs in the build stage, which runs first.
   image: node:latest
-  stage: process
+  stage: build
   script:
     - npm install uglify-js -g
     - mkdir -p ./output
-    - uglifyjs ./stanford-slate-enhancements.js -o output/stanford-slate-enhancements.min.js -c -m
+    - uglifyjs ./public/js/xxx.js -o output/xxx.min.js -c -m
   artifacts:
     paths:
       - output
 
-deploy-dev:
+deploy-job:      # This job runs in the deploy stage.
   stage: deploy
   script:
     - cp output/xxx.min.js public/js/xxx.min.js
