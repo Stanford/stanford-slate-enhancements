@@ -71,9 +71,9 @@ Turns a select list to a searchable select list.
 
 ![selectSearch Label](/uploads/9007e4c90d096f505ce5437ca42bdf13/Screen_Shot_2022-03-04_at_11.13.12_PM.png)
 
-3. Wrap the label in span tags with a class="sse-select-search"
+3. Add a span tag with a class="sse-select-search". It can be empty.
 ```html
-<span class="sse-select-search">Favorite Ice Cream</span>
+<span class="sse-select-search"></span>
 ```
 
 ### Show/Hide (showHide)
