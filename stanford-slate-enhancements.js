@@ -75,7 +75,7 @@ var StanfordSlateEnhancements = StanfordSlateEnhancements || (function(){
                 });
                 
                 // Run it on every span that has the class sse-search-select
-                $('span.sse-search-select').each(function() {
+                $('span.sse-select-search').each(function() {
                     $(this).closest('.form_select').find('.form_responses select').select2();
                 });
             });
