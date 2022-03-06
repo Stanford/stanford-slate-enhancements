@@ -30,6 +30,12 @@ StanfordSlateEnhancements.init(["showHide", "dialog"]);
 ```
 
 ## Features
+### Classify (classify)
+Slate doesn't provide a lot of css classes to theme with. This adds classes on the body tag and other locations that can be used in css styles as well as references for custom JavaScript.
+
+#### How to Configure
+No configuration required.
+
 ### Dialog (dialog)
 Dialog allows a user to click on a link and it will show a dialog window with specified text.
 

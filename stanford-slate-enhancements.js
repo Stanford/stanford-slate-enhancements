@@ -9,6 +9,10 @@ var StanfordSlateEnhancements = StanfordSlateEnhancements || (function(){
             if (_args) {
                 _args.forEach(function(item, index) {
                     switch (item) {
+                        case "classify":
+                            this.cassify();
+                            break;
+                            
                         case "dialog":
                             this.dialog();
                             break;
@@ -30,6 +34,60 @@ var StanfordSlateEnhancements = StanfordSlateEnhancements || (function(){
                 this.selectSearch();
                 this.dialog();
                 this.showHide();
+            }
+        },
+        classify: function() {
+            var classes = [];
+
+            // ======  Add path classes ======
+            let path = window.location.pathname.substring(1);
+            if (path.endsWith('/')) {
+                path = path.slice(0, -1);
+            }
+
+            // Replace slashes with hyphens to build our class.
+            let pathString = 'path-' + path.replace(/\//g, '-');
+            
+            // If it's a form add the form id to the class. 
+            let pathParts = path.split('/');
+            if (pathParts[pathParts.length -1] == 'frm') {
+                let urlParams = new URLSearchParams(window.location.search);
+                for (var key of urlParams.keys()) {
+                pathString += '-' + key;
+                break;
+                }
+            }
+
+            classes.push(pathString);
+
+            // Add an application path on the application pages.
+            if (pathParts.length > 1 && pathParts[0] == 'apply' && pathParts[pathParts.length - 1] !== 'status') {
+                classes.push('application');
+            }
+
+            // Add a slate-form class on the slate pages.
+            if (pathParts[0] == 'register') {
+                classes.push('slate-form');
+            }
+
+            // ===== End Path Classes =====
+
+            // ===== Logged In Class =====
+            if ($('#global a[href^="/account/logout"]').length || $('#global a[href^="/manage/logout"]').length) {
+                classes.push('logged-in');
+            }
+            else {
+                classes.push('not-logged-in');
+            }
+            // ===== End Logged In Class =====
+
+            var classString = classes.join(' ');
+
+            $('body').addClass(classString);
+
+            // Add a class for the application-list table.
+            if (classes.includes('path-apply') && classes.includes('logged-in')) {
+                $('#start_application_link').parent().prev().addClass('application-list');
             }
         },
         dialog : function() {
