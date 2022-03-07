@@ -1,42 +1,43 @@
 var StanfordSlateEnhancements = StanfordSlateEnhancements || (function(){
-    var _args = {}; // private
-
+    var _features = ["classify", "dialog", "selectSearch", "showHide"];
+    var _args = [];
+    var _observers = [];
     return {
-        init : function(Args) {
-            _args = Args;
-            // If there are arguments then load the features they want.
-            // Otherwise load all the features.
-            if (_args) {
-                _args.forEach(function(item, index) {
-                    switch (item) {
-                        case "classify":
-                            this.cassify();
-                            break;
-                            
-                        case "dialog":
-                            this.dialog();
-                            break;
+        init : function(args) {
+            if (!args) {
+                args = _features;
+            }
+            
+            // Add the arguments to the private variable.
+            _args = args;
 
-                        case "selectSearch":
-                            this.selectSearch();
-                            break;
+            // Call each feature.
+            args.forEach(function(item, index) {
+                this[item]();
+            });
 
-                        case "showHide":
-                            this.showHide();
-                            break;
-                        
-                        default:
-                            console.log(item + " is not a valid option");
+            // For the items that need to wait for elements like popups to show
+            // Create an observer to watch for changes.
+            var observer = new MutationObserver(function(mutations) {
+                _observers.forEach(function(item, index) {
+                    if (_args.includes(item)) {
+                        this[item]();
                     }
                 });
-            }
-            else {
-                this.selectSearch();
-                this.dialog();
-                this.showHide();
+            });
+
+            // Start observing
+            observer.observe(document.body, { //document.body is node target to observe
+                childList: true, //This is a must have for the observer with subtree
+                subtree: true //Set to true if changes must also be observed in descendants.
+            });
+        },
+        registerObserver : function(feature) { // Allows features to say they need to be called when a dom change occurs.
+            if (!_observers.includes(feature)) {
+                _observers.push(feature);
             }
         },
-        classify: function() {
+        classify : function() {
             var classes = [];
 
             // ======  Add path classes ======
@@ -53,8 +54,8 @@ var StanfordSlateEnhancements = StanfordSlateEnhancements || (function(){
             if (pathParts[pathParts.length -1] == 'frm') {
                 let urlParams = new URLSearchParams(window.location.search);
                 for (var key of urlParams.keys()) {
-                pathString += '-' + key;
-                break;
+                    pathString += '-' + key;
+                    break;
                 }
             }
 
@@ -90,68 +91,95 @@ var StanfordSlateEnhancements = StanfordSlateEnhancements || (function(){
                 $('#start_application_link').parent().prev().addClass('application-list');
             }
         },
-        dialog : function() {
-            // TODO: This should be able to run on popups as well. Will need an observer.
-            // Find all dialogs
-            $("[data-sse-dialog]").each(function() {
-                let $link = jQuery(this);
-                let dialogID = $link.attr('data-sse-dialog');
-                let $dialog = $('#' + dialogID);
+        dialog : function($dialogs) {
+            this.registerObserver('dialog');
+            $dialogs = $('[data-sse-dialog]');
+            if ($dialogs) {
+                
+                // Find all dialogs
+                $dialogs.each(function() {
+                    let $link = jQuery(this);
 
-                // Hide the dialog
-                $dialog.hide();
+                    // Check if the dialog has already been processed
+                    if ($link.hasClass("sse-dialog-observed")) {
+                        continue;
+                    }
+                    
+                    // Need to add a class markign that we have already processed this. 
+                    $link.addClass("sse-dialog-observed");
 
-                // Add dialog class
-                $dialog.addClass('dialog');
+                    let dialogID = $link.attr('data-sse-dialog');
+                    let $dialog = $('#' + dialogID);
 
-                // Create the close button and make it close on click.
-                let $dialogClose = $('<button class="default" type="button">Close</button>');
-                $dialogClose.on('click', function(e) {
-                    e.preventDefault();
-                    FW.Dialog.Unload();
+                    // Hide the dialog
+                    $dialog.hide();
+
+                    // Add dialog class
+                    $dialog.addClass('dialog');
+
+                    // Create the close button and make it close on click.
+                    let $dialogClose = $('<button class="default" type="button">Close</button>');
+                    $dialogClose.on('click', function(e) {
+                        e.preventDefault();
+                        FW.Dialog.Unload();
+                    });
+
+                    // Add the close button to the end of the dialog.
+                    $('<div class="action"></div>').appendTo($dialog).append($dialogClose);
+                
+                    // Open the dialog when the link is clicked.
+                    $link.on('click', function(e) {
+                        e.preventDefault();
+                        FW.Dialog.Load($dialog);
+                    });
                 });
-
-                // Add the close button to the end of the dialog.
-                $('<div class="action"></div>').appendTo($dialog).append($dialogClose);
-            
-                // Open the dialog when the link is clicked.
-                $link.on('click', function(e) {
-                    e.preventDefault();
-                    FW.Dialog.Load($dialog);
-                });
-            });
+            }
         },
-        selectSearch : function() {
-            // TODO: This should be able to run on popups as well. Will need an observer.
+        selectSearch : function($selects) {
+            this.registerObserver('selectSearch');
             // Get the select2 javascript file and load it in the header.
-            $.getScript("https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js", function( data, textStatus, jqxhr ) {
-                // Add it to our header so we can use it.
-                $('<link>').appendTo('head').attr({
-                    type: 'text/css',
-                    rel: 'stylesheet',
-                    href: 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css'
-                });
-                
-                // Run it on every span that has the class sse-search-select
-                $('span.sse-select-search').each(function() {
-                    $(this).closest('.form_select').find('.form_responses select').select2();
-                });
-            });
-                
-            $(document).on('select2:open', () => {
-                let allFound = document.querySelectorAll('.select2-container--open .select2-search__field');
-                $(this).one('mouseup keyup',()=>{
-                setTimeout(()=>{
-                    allFound[allFound.length - 1].focus();
-                },0);
-                });
+            $.ajax({
+                url: "https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/js/select2.min.js",
+                dataType: "script",
+                cache: "true",
+                success: function( data, textStatus, jqxhr ) {
+                    // Add the css to our header so we can use it.
+                    if (!$('link#select2-css')) {
+                        $('<link>').attr('id', 'select2-css').appendTo('head').attr({
+                            type: 'text/css',
+                            rel: 'stylesheet',
+                            href: 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css'
+                        });
+                    }
+                    
+                    // Run it on every span that has the class sse-search-select
+                    $selects.each(function() {
+                        $select = $(this);
+                         
+                        // Check if the select has already been processed
+                        if ($select.hasClass("sse-select-search-observed")) {
+                            continue;
+                        }
+                        
+                        // Need to add a class marking that we have already processed this. 
+                        $select.addClass("sse-select-search-observed");
+
+                        $select.closest('.form_select').find('.form_responses select').select2();
+                    });
+                }
             });
         },
-        showHide : function() {
-            // TODO: This should be able to run on popups as well. Will need an observer.
+        showHide : function($showhides) {
+            this.registerObserver('showHide');
             // Find all the showhide links.
-            $("[data-sse-showhide]").each(function() {
-                let $link = jQuery(this);
+            $showhides.each(function() {
+                let $link = $(this);
+                    
+                // Check if the select has already been processed
+                if ($link.hasClass("sse-select-search-observed")) {
+                    continue;
+                }
+
                 let showHideID = $link.attr('data-sse-showhide');
                 let $showHide = jQuery('#' + showHideID);
 
