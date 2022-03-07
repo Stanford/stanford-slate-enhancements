@@ -2,8 +2,6 @@
 
 This library provides a set of JavaScript features that you can use in your Slate instance.
 
-[[_TOC_]]
-
 ## Adding the Code
 Add the library to the head area in build.xslt. [Click here to choose which version to use and to get the code to add to the header.](https://cdnjs.com/libraries/stanford-slate-enhancements) 
 
@@ -39,7 +37,7 @@ No configuration required.
 ### Dialog (dialog)
 Dialog allows a user to click on a link and it will show a dialog window with specified text.
 
-![dialog](/uploads/c0aa1980368edc7e52ee3bf5d9355be8/dialog.gif)
+![dialog](docs/images/dialog.gif?raw=true)
 
 #### How to Configure
 1. To enable create a link to show the dialog. This can be anywhere on the page.
@@ -68,14 +66,14 @@ The value of `data-sse-dialog` should be the id of the div surrounding the dialo
 ### Select Search (selectSearch)
 Turns a select list to a searchable select list.
 
-![selectSearch](/uploads/7374747fa4a0f03819cfb85c3c7b1515/selectSearch.gif)
+![selectSearch](docs/images/selectSearch.gif?raw=true)
 
 #### How to Configure
 
 1. Go to the select field to make searchable
 2. Click Source
 
-![selectSearch Label](/uploads/9007e4c90d096f505ce5437ca42bdf13/Screen_Shot_2022-03-04_at_11.13.12_PM.png)
+![selectSearch Label](docs/images/wysiwyg-source.png?raw=true)
 
 3. Add a span tag with a class="sse-select-search". It can be empty.
 ```html
@@ -85,7 +83,7 @@ Turns a select list to a searchable select list.
 ### Show/Hide (showHide)
 Shows or Hides a section of text when clicking on a link.
 
-![showHide](/uploads/3d6d02380a4944c84d16dadf661c0eb0/showhide.gif)
+![showHide](docs/images/showhide.gif?raw=true)
 
 #### How to Configure
 1. Create a link to show/hide the text. This can be anywhere on the page.
