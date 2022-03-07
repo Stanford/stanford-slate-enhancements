@@ -148,7 +148,7 @@ var StanfordSlateEnhancements = StanfordSlateEnhancements || (function(){
                         $('<link>').attr('id', 'select2-css').appendTo('head').attr({
                             type: 'text/css',
                             rel: 'stylesheet',
-                            href: 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css'
+                            href: 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css'
                         });
                     }
                     
