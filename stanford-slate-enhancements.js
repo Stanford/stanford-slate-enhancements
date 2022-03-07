@@ -102,7 +102,7 @@ var StanfordSlateEnhancements = StanfordSlateEnhancements || (function(){
 
                     // Check if the dialog has already been processed
                     if ($link.hasClass("sse-dialog-observed")) {
-                        continue;
+                        return;
                     }
                     
                     // Need to add a class markign that we have already processed this. 
@@ -158,7 +158,7 @@ var StanfordSlateEnhancements = StanfordSlateEnhancements || (function(){
                          
                         // Check if the select has already been processed
                         if ($select.hasClass("sse-select-search-observed")) {
-                            continue;
+                            return;
                         }
                         
                         // Need to add a class marking that we have already processed this. 
@@ -177,7 +177,7 @@ var StanfordSlateEnhancements = StanfordSlateEnhancements || (function(){
                     
                 // Check if the select has already been processed
                 if ($link.hasClass("sse-select-search-observed")) {
-                    continue;
+                    return;
                 }
 
                 let showHideID = $link.attr('data-sse-showhide');
