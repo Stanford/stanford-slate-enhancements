@@ -6,7 +6,7 @@ parent: Features
 # Dialog (dialog)
 Dialog allows a user to click on a link and it will show a dialog window with specified text.
 
-![dialog](docs/images/dialog.gif?raw=true)
+![dialog](assets/images/dialog.gif)
 
 ## How to Configure
 1. To enable create a link to show the dialog. This can be anywhere on the page.

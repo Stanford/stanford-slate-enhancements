@@ -6,7 +6,7 @@ parent: Features
 # Show/Hide (showHide)
 Shows or Hides a section of text when clicking on a link.
 
-![showHide](docs/images/showhide.gif?raw=true)
+![showHide](assets/images/showhide.gif)
 
 ## How to Configure
 1. Create a link to show/hide the text. This can be anywhere on the page.
