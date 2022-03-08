@@ -18,6 +18,7 @@ Dialog allows a user to click on a link and it will show a dialog window with sp
 The value of `data-sse-dialog` should be the id of the div surrounding the dialog created below.
 
 2. Add the dialog. This can be anywhere on the page as well.
+
 ```html
 <div id="dialog-text">
   <div class="header">
