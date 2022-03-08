@@ -146,7 +146,7 @@ var StanfordSlateEnhancements = StanfordSlateEnhancements || (function(){
                     $selects = $('span.sse-select-search');
                     if ($selects) {
                         // Add the css to our header so we can use it.
-                        if (!$('link#select2-css')) {
+                        if (!$('link#select2-css').length) {
                             $('<link>').attr('id', 'select2-css').appendTo('head').attr({
                                 type: 'text/css',
                                 rel: 'stylesheet',
@@ -166,7 +166,13 @@ var StanfordSlateEnhancements = StanfordSlateEnhancements || (function(){
                             // Need to add a class marking that we have already processed this. 
                             $select.addClass("sse-select-search-observed");
 
-                            $select.closest('.form_select').find('.form_responses select').select2();
+                            var $selectInput = $select.closest('.form_select').find('.form_responses select');
+                            $selectInput.select2();
+
+                            // Make the input box take focus when opened.
+                            $selectInput.on('select2:open', function(e) {
+                                $('.select2-search__field').get(0).focus();
+                            });
                         });
                     }
                 }
