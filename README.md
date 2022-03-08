@@ -1,3 +1,9 @@
+---
+title: Home
+has_children: false
+nav_order: 1
+---
+
 # Stanford Slate Enhancements
 
 This library provides a set of JavaScript features that you can use in your Slate instance.
