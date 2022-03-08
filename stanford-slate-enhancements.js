@@ -13,7 +13,7 @@ var StanfordSlateEnhancements = StanfordSlateEnhancements || (function(){
 
             // Call each feature.
             args.forEach(function(item, index) {
-                this[item]();
+                StanfordSlateEnhancements[item]();
             });
 
             // For the items that need to wait for elements like popups to show
@@ -21,7 +21,7 @@ var StanfordSlateEnhancements = StanfordSlateEnhancements || (function(){
             var observer = new MutationObserver(function(mutations) {
                 _observers.forEach(function(item, index) {
                     if (_args.includes(item)) {
-                        this[item]();
+                        StanfordSlateEnhancements[item]();
                     }
                 });
             });
@@ -143,63 +143,72 @@ var StanfordSlateEnhancements = StanfordSlateEnhancements || (function(){
                 dataType: "script",
                 cache: "true",
                 success: function( data, textStatus, jqxhr ) {
-                    // Add the css to our header so we can use it.
-                    if (!$('link#select2-css')) {
-                        $('<link>').attr('id', 'select2-css').appendTo('head').attr({
-                            type: 'text/css',
-                            rel: 'stylesheet',
-                            href: 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css'
-                        });
-                    }
-                    
-                    // Run it on every span that has the class sse-search-select
-                    $selects.each(function() {
-                        $select = $(this);
-                         
-                        // Check if the select has already been processed
-                        if ($select.hasClass("sse-select-search-observed")) {
-                            return;
+                    $selects = $('span.sse-select-search');
+                    if ($selects) {
+                        // Add the css to our header so we can use it.
+                        if (!$('link#select2-css')) {
+                            $('<link>').attr('id', 'select2-css').appendTo('head').attr({
+                                type: 'text/css',
+                                rel: 'stylesheet',
+                                href: 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css'
+                            });
                         }
                         
-                        // Need to add a class marking that we have already processed this. 
-                        $select.addClass("sse-select-search-observed");
+                        // Run it on every span that has the class sse-search-select
+                        $selects.each(function() {
+                            $select = $(this);
+                            
+                            // Check if the select has already been processed
+                            if ($select.hasClass("sse-select-search-observed")) {
+                                return;
+                            }
+                            
+                            // Need to add a class marking that we have already processed this. 
+                            $select.addClass("sse-select-search-observed");
 
-                        $select.closest('.form_select').find('.form_responses select').select2();
-                    });
+                            $select.closest('.form_select').find('.form_responses select').select2();
+                        });
+                    }
                 }
             });
         },
         showHide : function($showhides) {
             this.registerObserver('showHide');
-            // Find all the showhide links.
-            $showhides.each(function() {
-                let $link = $(this);
-                    
-                // Check if the select has already been processed
-                if ($link.hasClass("sse-select-search-observed")) {
-                    return;
-                }
 
-                let showHideID = $link.attr('data-sse-showhide');
-                let $showHide = jQuery('#' + showHideID);
-
-                // Hide the text initially
-                $showHide.hide();
-
-                // Hide and show depending on the current state.
-                $link.attr('aria-expanded', 'false');
-                $link.on('click', function(e) {
-                    e.preventDefault();
-                    if ($link.attr('aria-expanded') == "true") {
-                        $link.attr('aria-expanded', 'false');
-                        $showHide.hide();
+            $showhides = $('[data-sse-showhide]');
+            if ($showhides) {
+                // Find all the showhide links.
+                $showhides.each(function() {
+                    let $link = $(this);
+                        
+                    // Check if the show hide 
+                    if ($link.hasClass("sse-showhide-observed")) {
+                        return;
                     }
-                    else {
-                        $link.attr('aria-expanded', 'true');
-                        $showHide.show();
-                    }
+
+                    $link.addClass("sse-showhide-observed");
+
+                    let showHideID = $link.attr('data-sse-showhide');
+                    let $showHide = jQuery('#' + showHideID);
+
+                    // Hide the text initially
+                    $showHide.hide();
+
+                    // Hide and show depending on the current state.
+                    $link.attr('aria-expanded', 'false');
+                    $link.on('click', function(e) {
+                        e.preventDefault();
+                        if ($link.attr('aria-expanded') == "true") {
+                            $link.attr('aria-expanded', 'false');
+                            $showHide.hide();
+                        }
+                        else {
+                            $link.attr('aria-expanded', 'true');
+                            $showHide.show();
+                        }
+                    });
                 });
-            });
+            }
         }
     };
 }());
