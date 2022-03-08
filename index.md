@@ -16,8 +16,6 @@ Uncompressed - https://cdn.jsdelivr.net/gh/Stanford/stanford-slate-enhancements@
 Compressed - https://cdn.jsdelivr.net/gh/Stanford/stanford-slate-enhancements@[version]/stanford-slate-enhancements.min.js
 ```
 
-
-
 Then add this line to the JavaScript that is loaded into the head. This can either be done inside a file that may already exist or place this code below the line in the previous step.
 ```html
 <script type="text/javascript">
@@ -31,11 +29,4 @@ It should look something like this.
 <script type="text/javascript">
   StanfordSlateEnhancements.init();
 </script>
-```
-
-### Options
-Some sites may not want to have all the features running on it.  There is the ability to pass an array of only the features that should be loaded. The allowed values can be found in the title of the each feature below surrounded by ().
-
-```javascript
-StanfordSlateEnhancements.init(["showHide", "dialog"]);
 ```
