@@ -166,8 +166,14 @@ var StanfordSlateEnhancements = StanfordSlateEnhancements || (function(){
                             // Need to add a class marking that we have already processed this. 
                             $select.addClass("sse-select-search-observed");
 
+                            // Let select2 options be set via a data attribute on the span tag.
+                            let options = {}
+                            if ($select.data('sse-select-search-options')) {
+                                options = $select.data('sse-select-search-options');
+                            }
+
                             var $selectInput = $select.closest('.form_select').find('.form_responses select');
-                            $selectInput.select2();
+                            $selectInput.select2(options);
 
                             // Make the input box take focus when opened.
                             $selectInput.on('select2:open', function(e) {
