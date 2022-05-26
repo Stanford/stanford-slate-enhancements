@@ -90,6 +90,16 @@ var StanfordSlateEnhancements = StanfordSlateEnhancements || (function(){
             if (classes.includes('path-apply') && classes.includes('logged-in')) {
                 $('#start_application_link').parent().prev().addClass('application-list');
             }
+
+            // Add classes for the login links
+            if (classes.includes('path-apply') && classes.includes('not-logged-in')) {
+                $firstTimeTitle = $('h2:contains("First-time users:")');
+                $firstTimeTitle.parents('td').addClass('create-an-account-wrapper');
+                $firstTimeTitle.parents('table').addClass('authentication-table');
+
+                $returningUsersTitle = $('h2:contains("Returning users:")');
+                $returningUsersTitle.parents('td').addClass('log-in-wrapper');
+            }
         },
         dialog : function($dialogs) {
             this.registerObserver('dialog');
