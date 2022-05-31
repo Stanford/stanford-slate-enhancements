@@ -1,5 +1,5 @@
 var StanfordSlateEnhancements = StanfordSlateEnhancements || (function(){
-    var _features = ["classify", "dialog", "selectSearch", "showHide"];
+    var _features = ["classify", "dialog", "selectSearch", "showHide", "tabs"];
     var _args = [];
     var _observers = [];
     return {
@@ -231,6 +231,43 @@ var StanfordSlateEnhancements = StanfordSlateEnhancements || (function(){
                     });
                 });
             }
+        },
+        tabs : function() {
+            this.registerObserver('tabs');
+
+            // Find all tab groups.
+            $('[data-sse-tabs-content]').each(function() {
+                var $tabGroup = $(this);
+
+                // Check if it has already been processed
+                if ($tabGroup.hasClass('sse-tabs-observed')) {
+                    return;
+                }
+                $tabGroup.addClass('sse-tabs-observed');
+
+                // Get the ID of content area to use
+                var contentID = $tabGroup.data('sse-tabs-content');
+
+                // Loop through each tab
+                var $tabs = $tabGroup.find('[data-sse-tab-action]');
+                $tabs.each(function() {
+                    var $tabItem = $(this);
+
+                    // Load the active tab
+                    if ($tabItem.hasClass('active')) {
+                        FW.Lazy.Fetch("?cmd=" + $tabItem.data('sse-tab-action'), $("#" + contentID));
+                    }
+
+                    // Switch tab when clicked.
+                    $tabItem.on('click', function(e) {
+                        e.preventDefault();
+                        var $tab = $(this);
+                        $tabs.removeClass('active');
+                        $tab.addClass('active');
+                        FW.Lazy.Fetch("?cmd=" + $tab.data('sse-tab-action'), $("#" + contentID));
+                    });
+                });
+            });
         }
     };
 }());
