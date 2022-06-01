@@ -13,10 +13,10 @@ Turns a select list to a searchable select list.
 1. Go to the select field to make searchable
 2. Click Source
 
-![selectSearch Label](assets/images/wysiwyg-source.png)
+    ![selectSearch Label](assets/images/wysiwyg-source.png)
 
 3. Add a span tag with a class="sse-select-search". It can be empty.
 
-```html
-<span class="sse-select-search"></span>
-```
+    ```html
+    <span class="sse-select-search"></span>
+    ```
