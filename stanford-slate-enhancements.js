@@ -249,13 +249,13 @@ var StanfordSlateEnhancements = StanfordSlateEnhancements || (function(){
                 var contentID = $tabGroup.data('sse-tabs-content');
 
                 // Loop through each tab
-                var $tabs = $tabGroup.find('[data-sse-tab-action]');
+                var $tabs = $tabGroup.find('[data-sse-tabs-action]');
                 $tabs.each(function() {
                     var $tabItem = $(this);
 
                     // Load the active tab
                     if ($tabItem.hasClass('active')) {
-                        FW.Lazy.Fetch("?cmd=" + $tabItem.data('sse-tab-action'), $("#" + contentID));
+                        FW.Lazy.Fetch("?cmd=" + $tabItem.data('sse-tabs-action'), $("#" + contentID));
                     }
 
                     // Switch tab when clicked.
@@ -264,7 +264,7 @@ var StanfordSlateEnhancements = StanfordSlateEnhancements || (function(){
                         var $tab = $(this);
                         $tabs.removeClass('active');
                         $tab.addClass('active');
-                        FW.Lazy.Fetch("?cmd=" + $tab.data('sse-tab-action'), $("#" + contentID));
+                        FW.Lazy.Fetch("?cmd=" + $tab.data('sse-tabs-action'), $("#" + contentID));
                     });
                 });
             });
