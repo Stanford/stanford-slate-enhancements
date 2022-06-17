@@ -185,6 +185,10 @@ var StanfordSlateEnhancements = StanfordSlateEnhancements || (function(){
                             var $selectInput = $select.closest('.form_select').find('.form_responses select');
                             $selectInput.select2(options);
 
+                            // Fix accessibility issue where if a label exists it doesn't point to the select2 widget.
+                            var selectID = $selectInput.attr('id');
+                            $('label[for="' + selectID + '"]').attr('for', 'select2-' + selectID + '-container');
+
                             // Make the input box take focus when opened.
                             $selectInput.on('select2:open', function(e) {
                                 $('.select2-search__field').get(0).focus();
