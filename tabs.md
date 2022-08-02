@@ -29,12 +29,9 @@ Creates a tabbed interface that can be used in portals.
 
     Whichever tab has a class with the value of "active" will be initially loaded. 
 
-2. Add a wrapper div and some javascript to the page where you want the portal view to load.
+2. Add a wrapper div to the page where you want the portal view to load.
 
     ```html
-    <script type="text/javascript">
-      StanfordSlateEnhancements.init(['tabs']);
-    </script>
     <div id="tab-data">
     </div>
     ```
